@@ -2,10 +2,10 @@ module SimpleMusic where
 import Euterpea
 
 t251 :: Music Pitch
-t251 = let dMinor = d 4 wn :=: f 4 wn :=: a 4 wn
-           gMajor = g 4 wn :=: b 4 wn :=: d 5 wn
-           cMajor = c 4 bn :=: e 4 bn :=: g 4 bn
-       in dMinor :+: gMajor :+: cMajor
+t251 = let dMinor = minorChord (D, 4) wn
+           gMajor = majorChord (G, 4) wn
+           cMajor = majorChord (C, 4) bn
+       in line [dMinor, gMajor, cMajor]
 
 -- define a chord as transpositions of a pitch
 myChordDef :: [Int] -> Pitch -> Dur -> Music Pitch
@@ -23,4 +23,4 @@ twoFiveOne :: Pitch -> Dur -> Music Pitch
 twoFiveOne p d = let ii = minorChord (trans 2 p) d
                      v  = majorChord (trans 7 p) d
                      i  = majorChord p  (2 * d)
-                 in ii :+: v :+: i
+                 in line [ii, v, i]
