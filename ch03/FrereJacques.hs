@@ -37,4 +37,14 @@ mkSong p = let phrases = [frereJacques, frereJacques,
 song :: Pitch -> Music Pitch
 song p = foldr (:+:) (rest 0) (mkSong p)
 
--- (<*>) :: [a -> b] -> [a] -> [b]
+withDelays :: [Music Pitch] -> [Music Pitch]
+withDelays =
+  let incDelay _ []         = []
+      incDelay del (mp:mps) = (rest del :+: mp) : incDelay (bn + del) mps
+  in incDelay 0
+
+songWithVoices :: Pitch -> [InstrumentName] -> Music Pitch
+songWithVoices p insts =
+  let s              = song p
+      withVoice inst = Modify (Instrument inst) s
+  in foldl (:=:) (rest 0) (withDelays (map withVoice insts))
